@@ -1,0 +1,68 @@
+<section class="uk-container">
+  <h1 class="py-5">Search Movie</h1>
+
+  <form [formGroup]="searchMovieForm" (ngSubmit)="onSubmit()" #myForm="ngForm">
+    <!-- Checking boolean status from the form for debugging-->
+    <div class="my-3">
+      <span class="fw-bold">Form submitted ? </span>{{myForm.submitted}}
+      <span class="fw-bold">Form valid ? </span> {{searchMovieForm.valid}}
+      <span class="fw-bold">Form invalid ? </span> {{searchMovieForm.valid}}
+    </div>
+
+    <!--Creating a nested form inputs from identification-->
+    <div formGroupName="identification">
+      <!--Error section -->
+      <div class="uk-form-danger"
+           *ngIf="myForm.submitted && searchMovieForm.controls['identification'].errors?.['isRequired']">
+        You need to insert an ID and a title for the movie.
+      </div>
+
+      <div>
+        <label class="col-form-label" for="id">Movie Id</label>
+        <input class="uk-input" id="id" name="id" type="text" formControlName="id">
+      </div>
+      <div>
+        <label class="col-form-label" for="title">Title</label>
+        <input class="uk-input" id="title" name="title" type="text" formControlName="title">
+      </div>
+
+      <h5 class="my-3">Movie Additional Informations:</h5>
+    </div>
+    <div>
+      <label for="type">Type</label>
+      <select name="type" id="type" formControlName="type" class="uk-select">
+        <!--Creating options from array movieTypes in component -->
+        <option [ngValue]="tp" *ngFor="let tp of movieTypes">{{tp}}</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="format">Format</label>
+      <select name="format" id="format" formControlName="format" class="uk-select">
+        <!--Creating options from array movieFormats in component -->
+        <option [ngValue]="format" *ngFor="let format of movieFormats">{{format}}</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="releaseYear">Release year</label>
+      <input type="number" id="releaseYear" formControlName="releaseYear" class="uk-input">
+      <!--Error section -->
+      <div>
+        <div class="text-center text-danger my-3"
+             *ngIf="myForm.submitted && searchMovieForm.controls['releaseYear'].errors?.['required']">
+          You need to indicate the movie release year.
+        </div>
+        <div class="text-center text-danger my-3"
+             *ngIf="myForm.submitted && searchMovieForm.controls['releaseYear'].errors?.['min']">
+          The year should be amongst <span
+          class="fw-bold">{{ searchMovieForm.controls['releaseYear'].errors?.['min'].minYearRequired }}</span>
+          and <span class="fw-bold">{{ searchMovieForm.controls['releaseYear'].errors?.['min'].maxYearRequired }}
+          .</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="uk-button-primary p-2 my-3" type="submit">Save it</button>
+  </form>
+</section>
